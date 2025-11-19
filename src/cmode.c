@@ -22,6 +22,8 @@
 extern int changemode(int, int, char *);
 
 static int cc_strip_trailp = TRUE;	/* Delete Trailing space? */
+static int cc_basic_indent = 4;		/* Basic Indent multiple */
+static int cc_cont_indent = 4;		/* Continued line indent */
 
 static int getmatch(int, int);
 static int getindent(const struct line *, int *);
@@ -29,6 +31,9 @@ static int in_whitespace(struct line *, int);
 static int findcolpos(const struct buffer *, const struct line *, int);
 static struct line *findnonblank(struct line *);
 static int isnonblank(const struct line *, int);
+
+void cmode_init(void);
+int cc_comment(int, int);
 
 /* Keymaps */
 
@@ -230,8 +235,6 @@ getindent(const struct line *lp, int *curi)
 	int obrace = 0;		/* open brace count */
 	int cbrace = 0;		/* close brace count */
 	int firstnwsp = FALSE;	/* First nonspace encountered? */
-	int colonp = FALSE;	/* Did we see a colon? */
-	int questionp = FALSE;	/* Did we see a question mark? */
 	int slashp = FALSE;	/* Slash? */
 	int astp = FALSE;	/* Asterisk? */
 	int cpos = -1;		/* comment position */
@@ -250,10 +253,9 @@ getindent(const struct line *lp, int *curi)
 	}
 
 	/* If last line was blank, choose 0 */
-	if (lo == llength(lp))
-		nicol = 0;
+	/* MOD: no weird blank-line logic  */
 
-	newind = 0;
+	newind = cc_basic_indent;
 	/* Compute modifiers */
 	for (co = lo; co < llength(lp); co++) {
 		c = lgetc(lp, co);
@@ -283,12 +285,8 @@ getindent(const struct line *lp, int *curi)
 			firstnwsp = FALSE;
 		} else if (c == '}') {
 			cbrace++;
-		} else if (c == '?') {
-			questionp = TRUE;
 		} else if (c == ':') {
-			/* ignore (foo ? bar : baz) construct */
-			if (!questionp)
-				colonp = TRUE;
+			/* MOD: no snap upon label encounter */
 		} else if (c == '/') {
 			/* first nonwhitespace? -> indent */
 			if (firstnwsp) {
@@ -320,18 +318,14 @@ getindent(const struct line *lp, int *curi)
 	 * If not terminated with a semicolon, and brace or paren open.
 	 * we continue
 	 */
-	if (colonp) {
-		*curi += -curbp->b_tabw;
-		newind -= -curbp->b_tabw;
-	}
 
-	*curi -= (cbrace) * curbp->b_tabw;
-	newind += obrace * curbp->b_tabw;
+	*curi -= (cbrace) * cc_basic_indent;
+	newind += (obrace) * cc_basic_indent;
 
 	if (nparen < 0)
-		newind -= curbp->b_tabw / 2;
+		newind -= cc_cont_indent;
 	else if (nparen > 0)
-		newind += curbp->b_tabw / 2;
+		newind += cc_cont_indent;
 
 	*curi += nicol;
 
