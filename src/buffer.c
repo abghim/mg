@@ -25,7 +25,7 @@ static struct buffer *bnew(const char *);
 static int usebufname(const char *);
 
 /* Default tab width */
-int	 defb_tabw = 8;
+int	 defb_tabw = 4;
 
 /*
  * Set the tab width for the current buffer, or the default for new
