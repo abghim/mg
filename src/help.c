@@ -19,7 +19,7 @@
 
 #define KEYNAMESZ	6 /* max is "C-SPC" */
 
-const char *hlp = "C-h q  quick help | C-h t  tutorial | C-h b  key bindings | C = Ctrl | M = Alt";
+const char *hlp = "MicroGNUEmacs -- Ghim Mod";
 
 static int	showall(struct buffer *, KEYMAP *, char *);
 static int	findbind(KEYMAP *, PF, char *, size_t);
