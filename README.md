@@ -1,9 +1,37 @@
 # MicroGNUEmacs -- Ghim's mod
+## Introduction
 This fork of the mg editor removes some features of the original source for more reasonable c-mode. The changes are:
 - Entering colons(:) will NOT snap the line to the first column in C-mode
 - Tab width is set to 4 by default
 - Other reasonable fixes for sane indentation
 - The startup message is simpler
+
+## Build
+The original mg editor has somewhat confusing build instructions. To build this repo,
+1. Install `autoconf` and `automake` (commands included in these packages are required to generate configure script; `brew install autoconf automake` works fine for installation on Mac).
+2. Run `./autogen.sh`
+3. Run `./configure`, then build with `make`
+The binary is under src/mg.
+
+## Additional Config
+Add this to ~/.mg for an undisturbing, reasonable, sane C-mode editing experience.
+```
+set-tab-width 4
+auto-execute "*.c" c-mode
+auto-execute "*.java" c-mode
+auto-execute "*.rs" c-mode
+auto-execute "*.json" c-mode
+auto-execute "*.cpp" c-mode
+auto-execute "*.py" auto-indent-mode
+
+define-key c ")" self-insert-command
+define-key c "]" self-insert-command
+define-key c "}" self-insert-command
+
+define-key indent ")" self-insert-command
+define-key indent "]" self-insert-command
+define-key indent "}" self-insert-command
+```
 
 The original README is included below, unmodified.
 This code is licensed under WTFPL, not Unlicense.
