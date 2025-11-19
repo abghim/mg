@@ -1,3 +1,12 @@
+# MicroGNUEmacs -- Ghim's mod
+This fork of the mg editor removes some features of the original source for more reasonable c-mode. The changes are:
+- Entering colons(:) will NOT snap the line to the first column in C-mode
+- Tab width is set to 4 by default
+- Other reasonable fixes for sane indentation
+- The startup message is simpler
+
+The original README is included below, unmodified.
+This code is licensed under WTFPL, not Unlicense.
 Micro (GNU) Emacs
 =================
 [![License Badge][]][License] [![GitHub Status][]][GitHub] [![Coverity Status][]][Coverity Scan]
