@@ -35,8 +35,10 @@ define-key indent "}" self-insert-command
 
 The original README is included below, unmodified.
 This code is licensed under WTFPL, not Unlicense.
-Micro (GNU) Emacs
-=================
+
+
+# Micro (GNU) Emacs
+
 [![License Badge][]][License] [![GitHub Status][]][GitHub] [![Coverity Status][]][Coverity Scan]
 
 Contents
